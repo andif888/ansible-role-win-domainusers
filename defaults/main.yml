@@ -1,0 +1,72 @@
+---
+# defaults file for ansible-role-win-domainusers
+
+# domain_groups_ou_path_default: ""
+# domain_users_ou_path_default: ""
+
+# @var win_path_seperator:description: backslash in variable for easy handling
+win_path_seperator: '\'
+
+# @var win_domain_groups_add_list:description: Specify a list of local groups to be added
+# @var win_domain_groups_add_list:example: >
+# win_domain_groups_add_list:
+#  - { name: "group1", category: "security", description: "desc1", displayname: "group1" }
+#  - { name: "group2", description: "desc2" }
+#  - { name: "group3", description: "desc3" }
+# @end
+win_domain_groups_add_list: []
+
+# @var win_domain_groups_remove_list:description: Specify a list of local groups to be removed
+# @var win_domain_groups_remove_list:example: >
+# win_domain_groups_remove_list:
+#  - "group1"
+#  - "group2"
+#  - "group3"
+# @end
+win_domain_groups_remove_list: []
+
+# @var win_domain_users_add_list:description: Specify a list of local users to be added
+# @var win_domain_users_add_list:example: >
+# win_domain_users_add_list:
+#  - { name: "user1", description: "desc1", fullname: "", password: "", password_expired: false, password_never_expires: false }
+#  - { name: "user2", description: "desc2" }
+#  - { name: "user3", description: "desc3" }
+# @end
+win_domain_users_add_list: []
+
+# @var win_domain_users_remove_list:description: Specify a list of local users to be removed
+# @var win_domain_users_remove_list:example: >
+# win_domain_users_remove_list:
+#  - "user1"
+#  - "user2"
+#  - "user3"
+# @end
+win_domain_users_remove_list: []
+
+# @var win_domain_group_memberships_add_list:description: A list of memberships to add
+# @var win_domain_group_memberships_add_list:example: >
+# win_domain_group_memberships_add_list: 
+#   - name: "group1"
+#     members:
+#       - "user1"
+#       - "user2" 
+#   - name: "group2"
+#     members:
+#       - "user3"
+#       - "user4"
+# @end
+win_domain_group_memberships_add_list: []
+
+# @var win_domain_group_memberships_remove_list:description: a list of memberships to remove
+# @var win_domain_group_memberships_remove_list:example: >
+# win_domain_group_memberships_remove_list:
+#   - name: "group1"
+#     members:
+#       - "user1"
+#       - "user2"
+#   - name: "group2"
+#     members:
+#       - "user3"
+#       - "user4"
+# @end
+win_domain_group_memberships_remove_list: []

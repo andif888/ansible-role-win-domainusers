@@ -1,0 +1,76 @@
+---
+# tasks file for ansible-role-win-domainusers
+- name: Add domain groups
+  community.windows.win_domain_group:
+    category: "{{ item.category | default('security') }}"
+    description: "{{ item.description | default(omit) }}"
+    display_name: "{{ item.display_name | default(omit) }}"
+    ignore_protection: "{{ item.ignore_protection | default(true) }}"
+    managed_by: "{{ item.managed_by | default(omit) }}"
+    name: "{{ item.name }}"
+    organizational_unit: '{{ item.organizational_unit | default(domain_groups_ou_path_default) | default(omit) }}'
+    scope: "{{ item.scope | default('global') }}"
+    state: present
+  loop: '{{ win_domain_groups_add_list }}'
+  when: win_domain_groups_add_list | length > 0
+
+- name: Add domain users
+  community.windows.win_domain_user:
+    city: "{{ item.city | default(omit) }}"
+    company: "{{ item.company | default(omit) }}"
+    country: "{{ item.country | default(omit) }}"
+    description: "{{ item.description | default(omit) }}"
+    email: "{{ item.email | default(omit) }}"
+    enabled: "{{ item.enabled | default(true) }}"
+    firstname: "{{ item.firstname | default(omit) }}"
+    groups: "{{ item.groups | default(omit) }}"
+    groups_action: "{{ item.groups_action | default('replace') }}"
+    groups_missing_behaviour: "{{ item.groups_missing_behaviour | default('fail') }}"
+    identity: "{{ item.identity | default(omit) }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password | default(omit) }}"
+    password_expired: "{{ item.password_expired | default(omit) }}"
+    password_never_expires: "{{ item.password_never_expires | default('yes') }}"
+    path: "{{ item.path | default(domain_users_ou_path_default) | default(omit) }}"
+    postal_code: "{{ item.postal_code | default(omit) }}"
+    sam_account_name: "{{ item.sam_account_name | default(item.name) }}"
+    state: present
+    state_province: "{{ item.state_province | default(omit) }}"
+    street: "{{ item.street | default(omit) }}"
+    surname: "{{ item.surname | default(omit) }}"
+    update_password: "{{ item.update_password | default('always') }}"
+    upn: "{{ item.upn | default(omit) }}"
+    user_cannot_change_password: "{{ item.user_cannot_change_password | default(omit) }}"
+  loop: '{{ win_domain_users_add_list }}'
+  when: win_domain_users_add_list | length > 0
+
+- name: Add domain group membership
+  community.windows.win_domain_group_membership:
+    name: "{{ item.name }}"
+    members: "{{ item.members }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ win_domain_group_memberships_add_list }}"
+  when: win_domain_group_memberships_add_list | length > 0
+
+- name: Remove domain group membership
+  community.windows.win_domain_group_membership:
+    name: "{{ item.name }}"
+    members: "{{ item.members }}"
+    state: absent
+  loop: "{{ win_domain_group_memberships_remove_list }}"
+  when: win_domain_group_memberships_remove_list | length > 0
+
+- name: Remove domain groups
+  community.windows.win_domain_group:
+    ignore_protection: true
+    name: "{{ item }}"
+    state: absent
+  loop: '{{ win_domain_groups_remove_list }}'
+  when: win_domain_groups_remove_list | length > 0
+
+- name: Remove domain users
+  community.windows.win_domain_user:
+    name: "{{ item }}"
+    state: absent
+  loop: '{{ win_domain_users_remove_list }}'
+  when: win_domain_users_remove_list | length > 0
